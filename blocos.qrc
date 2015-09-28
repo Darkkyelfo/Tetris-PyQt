@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="blocos">
-    <file>Imagens/blocoVermelho.png</file>
+    <file>Imagens/1.png</file>
+    <file>Imagens/2.png</file>
+    <file>Imagens/3.png</file>
+    <file>Imagens/4.png</file>
+    <file>Imagens/5.png</file>
+    <file>Imagens/6.png</file>
+    <file>Imagens/7.png</file>
   </qresource>
 </RCC>
