@@ -12,7 +12,7 @@ from campoTetris import Ui_MainWindow
 from PyQt4 import QtGui, QtCore
 import blocos_rc
 from Peca import Peca
-import random
+
 
 class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     pecaAtual=None
@@ -29,8 +29,14 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         if(key == QtCore.Qt.Key_Right):
             self.pecaAtual.moverDir()
         if(key ==QtCore.Qt.Key_Left):
-            self.pecaAtual.moverEsq()  
+            self.pecaAtual.moverEsq()
+        if(key ==QtCore.Qt.Key_Down):
+            self.pecaAtual.cairPeca()
+        if(key ==QtCore.Qt.Key_Up):
+            self.pecaAtual.subirPeca()
+            
         self.update()#Atualiza a GUI
+        
 
 
 

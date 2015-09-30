@@ -13,30 +13,36 @@ import random
 class Peca(QtGui.QWidget):
     x=None
     y=None
+    novaPeca=True
     tamQuadrado=20
     tipoPeca=None
     posX=3*(tamQuadrado+3)
-    posY=0
+    posY=22
     def __init__(self,telaPai,x,y):
-        print(x)
         self.x=x
         self.y=y
         super(Peca, self).__init__(telaPai)
         self.setGeometry(0, 0, self.x, self.y)
-        self.tipoPeca = random.randint(1,4)
+        self.gerarPeca()
+         
+    def gerarPeca(self):
+        self.tepoPeca=random.randint(1,4)
 
     def paintEvent(self, e):
         qp = QtGui.QPainter(self)
-        qp.begin(self)
+      #  qp.begin(self)
         self.drawRectangles(qp)
-        qp.end()
+      #  qp.end()
+
         
     def drawRectangles(self,qp):#Desenha as peças
-        print("draw")
-     #   color = QtGui.QColor(0, 0, 0)
-       # color.setNamedColor('#d4d4d4')
-      #  qp.setPen(color)
-        qp.setBrush(QtGui.QColor(255, 80, 0, 160))
+        colorTable = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC,
+                      0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
+        if(self.novaPeca==True):
+            self.cor = random.randint(0,4)
+            self.novaPeca=False
+            
+        qp.setBrush(QtGui.QColor(colorTable[self.cor]))
         #peça []
         if(self.tipoPeca==1):
             qp.drawRect(self.posX, self.posY,self.tamQuadrado, self.tamQuadrado)
@@ -52,9 +58,9 @@ class Peca(QtGui.QWidget):
         #peça I
         elif(self.tipoPeca==3):
             qp.drawRect(self.posX, self.posY,self.tamQuadrado, self.tamQuadrado)
-            qp.drawRect(self.posX, self.posY+23, self.tamQuadrado, self.tamQuadrado)
-            qp.drawRect(self.posX, self.posY+46, self.tamQuadrado, self.tamQuadrado)
-            qp.drawRect(self.posX, self.posY+69, self.tamQuadrado, self.tamQuadrado)
+            qp.drawRect(self.posX, self.posY+22, self.tamQuadrado, self.tamQuadrado)
+            qp.drawRect(self.posX, self.posY+44, self.tamQuadrado, self.tamQuadrado)
+            qp.drawRect(self.posX, self.posY+66, self.tamQuadrado, self.tamQuadrado)
         #peça T
         elif(self.tipoPeca==4):
             qp.drawRect(self.posX, self.posY,self.tamQuadrado, self.tamQuadrado)
@@ -65,13 +71,20 @@ class Peca(QtGui.QWidget):
     
     
     def moverEsq(self):
-        self.posX = self.posX -23
+        print(self.posX)
+        if(self.posX >0):#impede a peça de passar da tela
+            self.posX = self.posX -23
     
     def moverDir(self):
-        self.posX=self.posX+23
+        print(self.posX)
+        if(self.posX+23<= self.x):#impede a peça de passar da tela
+            self.posX=self.posX+23
     
     def cairPeca(self):
-        self.posY=self.posY+23
+        self.posY=self.posY+22
+        
+    def subirPeca(self):
+        self.posY=self.posY-22
             
         
         
