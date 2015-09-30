@@ -6,46 +6,44 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>450</height>
+    <width>229</width>
+    <height>483</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PyQtTetris</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>110</y>
-      <width>50</width>
-      <height>50</height>
+      <x>0</x>
+      <y>0</y>
+      <width>229</width>
+      <height>483</height>
      </rect>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/GRid/Imagens/1-3grid.png);</string>
     </property>
-    <property name="maximumSize">
-     <size>
-      <width>50</width>
-      <height>50</height>
-     </size>
-    </property>
-    <property name="sizeIncrement">
-     <size>
-      <width>50</width>
-      <height>50</height>
-     </size>
+   </widget>
+   <widget class="QWidget" name="widget_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>229</width>
+      <height>483</height>
+     </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(:/blocos/Imagens/7.png);</string>
-    </property>
-    <property name="text">
-     <string/>
+     <string notr="true"/>
     </property>
    </widget>
   </widget>

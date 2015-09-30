@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'campoTetris.ui'
 #
-# Created: Mon Sep 28 02:33:55 2015
+# Created: Wed Sep 30 15:16:50 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,21 +26,19 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(300, 450)
+        MainWindow.resize(229, 483)
+        MainWindow.setStyleSheet(_fromUtf8(""))
         self.centralwidget = QtGui.QWidget(MainWindow)
+        self.centralwidget.setStyleSheet(_fromUtf8(""))
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.label = QtGui.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(80, 110, 50, 50))
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-        self.label.setMaximumSize(QtCore.QSize(50, 50))
-        self.label.setSizeIncrement(QtCore.QSize(50, 50))
-        self.label.setStyleSheet(_fromUtf8("image: url(:/blocos/Imagens/7.png);"))
-        self.label.setText(_fromUtf8(""))
-        self.label.setObjectName(_fromUtf8("label"))
+        self.widget = QtGui.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(0, 0, 229, 483))
+        self.widget.setStyleSheet(_fromUtf8("background-image: url(:/GRid/Imagens/1-3grid.png);"))
+        self.widget.setObjectName(_fromUtf8("widget"))
+        self.widget_2 = QtGui.QWidget(self.centralwidget)
+        self.widget_2.setGeometry(QtCore.QRect(0, 0, 229, 483))
+        self.widget_2.setStyleSheet(_fromUtf8(""))
+        self.widget_2.setObjectName(_fromUtf8("widget_2"))
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
