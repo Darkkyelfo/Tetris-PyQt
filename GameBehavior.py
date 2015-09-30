@@ -34,6 +34,10 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
             self.pecaAtual.cairPeca()
         if(key ==QtCore.Qt.Key_Up):
             self.pecaAtual.subirPeca()
+        if(key ==QtCore.Qt.Key_Space):
+            self.pecaAtual.teste=True
+            
+
             
         self.update()#Atualiza a GUI
         
