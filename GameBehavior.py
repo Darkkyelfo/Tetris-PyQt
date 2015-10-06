@@ -10,48 +10,50 @@ Created on Wed Sep 30 12:39:49 2015
 
 from campoTetris import Ui_MainWindow
 from PyQt4 import QtGui, QtCore
-import blocos_rc
+from DesenhoPeca import DesenhoPeca
 from Peca import Peca
 
 
 class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
+    #atributos da classe
+    desenhoPeca=None
     pecaAtual=None
+    
     def __init__(self,parent=None):
         super(GameBehavior, self).__init__(parent)
         self.setupUi(self)
-        self.pecaAtual = Peca(self.centralwidget,self.width(),self.height())
-        self.widget_2=self.pecaAtual
+        #cria tela onde vão ser desenhadas as peças
+        self.desenhoPeca = DesenhoPeca(self.centralwidget,self.width(),self.height())
+        #gera a primeira peca
+        self.pecaAtual=Peca()
+        self.pecaAtual.gerarPeca()
+        
+        #trecho pare teste
+        #self.pecaAtual.setTipo(7)
+        #self.pecaAtual.setRotaco(1)
+        
+        #desenha a peça na tela
+        self.desenhoPeca.receberPeca(self.pecaAtual)
+        self.widget_2=self.desenhoPeca
         self.show()
         
     #funçao que receve eventos do teclado
     def keyPressEvent(self, event):
         key = event.key()
-        if(key == QtCore.Qt.Key_Right):
-            self.pecaAtual.moverDir()
-        if(key ==QtCore.Qt.Key_Left):
-            self.pecaAtual.moverEsq()
+        if(key == QtCore.Qt.Key_Right):#mover para a direira
+            self.desenhoPeca.moverDir()
+        if(key ==QtCore.Qt.Key_Left):#mover para a esquerda 
+            self.desenhoPeca.moverEsq()
         if(key ==QtCore.Qt.Key_Down):
-            self.pecaAtual.cairPeca()
-        if(key ==QtCore.Qt.Key_Up):
-            self.pecaAtual.subirPeca()
-        if(key ==QtCore.Qt.Key_Space):
-            self.pecaAtual.teste=True
-            
-
+            self.desenhoPeca.cairPeca()
+        if(key ==QtCore.Qt.Key_Up):#rotacionar peça ao apertar up
+            self.pecaAtual.rotacionar()
+        if(key ==QtCore.Qt.Key_Space):#cria outra peca ao apertar spaço(teste)
+            self.pecaAtual.gerarPeca()
+    
             
         self.update()#Atualiza a GUI
         
-
-
-
-    
-
-
-
-       
-
-    
-
 if __name__ == '__main__':
     import sys
     app = QtGui.QApplication(sys.argv)
