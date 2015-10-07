@@ -18,6 +18,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     #atributos da classe
     desenhoPeca=None
     pecaAtual=None
+    campo=[]
     
     def __init__(self,parent=None):
         super(GameBehavior, self).__init__(parent)
@@ -26,12 +27,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         self.desenhoPeca = DesenhoPeca(self.centralwidget,self.width(),self.height())
         #gera a primeira peca
         self.pecaAtual=Peca()
-        self.pecaAtual.gerarPeca()
-        
-        #trecho pare teste
-        #self.pecaAtual.setTipo(7)
-        #self.pecaAtual.setRotaco(1)
-        
+        self.pecaAtual.gerarPeca()            
         #desenha a peça na tela
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.widget_2=self.desenhoPeca
@@ -45,12 +41,13 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         if(key ==QtCore.Qt.Key_Left):#mover para a esquerda 
             self.desenhoPeca.moverEsq()
         if(key ==QtCore.Qt.Key_Down):
-            self.desenhoPeca.cairPeca()
+            self.desenhoPeca.descerPeca()
         if(key ==QtCore.Qt.Key_Up):#rotacionar peça ao apertar up
             self.pecaAtual.rotacionar()
-        if(key ==QtCore.Qt.Key_Space):#cria outra peca ao apertar spaço(teste)
+        if(key ==QtCore.Qt.Key_Space):#faz a peça cair rápido
+            self.desenhoPeca.soltarPeca()
+        if(key==QtCore.Qt.Key_G):
             self.pecaAtual.gerarPeca()
-    
             
         self.update()#Atualiza a GUI
         

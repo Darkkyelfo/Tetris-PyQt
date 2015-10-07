@@ -13,16 +13,23 @@ import random
 #da tela do campo. Foi feita assim,pois, ao chamar o método paintEvent
 #direto na tela campo(GameBehavior) as peças ficam por atras do styleSheet. 
 class DesenhoPeca(QtGui.QWidget):
-    x=None
+    x=None#armazena o tamanho da tela (229)
     y=None
     novaPeca=True
     teste=False
     posicoes=[]
     posicoesY=[]
+    #cria uma matriz 20x10 que representa o campo
+    campo=[[0,0,0,0,0,0,0,0,0,0] for i in range(20)]
     tamQuadrado=20
     peca=None
     posX=3*(tamQuadrado+3)
     posY=22
+    #delimita o tamanho do campo para a peça não 
+    #passar pela borda
+    limiteEsq=None
+    limiteDir=None
+    limiteY=None
     def __init__(self,telaPai,x,y):
         self.x=x
         self.y=y
@@ -32,6 +39,29 @@ class DesenhoPeca(QtGui.QWidget):
     #função que recebe o tipo de peca     
     def receberPeca(self,peca):
         self.peca=peca
+    
+    def limitarCampo(self):
+        #esse trecho encontra o elemento de maior valor nas linhas da matriz
+        #Serve para delimitar o movimento das peças
+        minimo =0
+        maximo= 0
+        maxy=0
+        
+        for j,i in enumerate(self.peca.getPeca()):
+            if(minimo>self.peca.getPeca()[j][0]):
+                minimo=self.peca.getPeca()[j][0]
+                
+        for j, i in enumerate(self.peca.getPeca()):
+            if(maximo<self.peca.getPeca()[j][0]):
+                maximo=self.peca.getPeca()[j][0]
+                
+        for j, i in enumerate(self.peca.getPeca()):
+            if(maxy<self.peca.getPeca()[j][1]):
+                maxy=self.peca.getPeca()[j][1]
+                
+        self.limiteEsq=23*minimo
+        self.limiteDir = 23*maximo
+        self.limiteY=22*(maxy+1)
 
     def paintEvent(self, e):
         qp = QtGui.QPainter(self)
@@ -68,19 +98,24 @@ class DesenhoPeca(QtGui.QWidget):
         qp.drawRect(posX+(23*matriz[1][0]), posY+(22*matriz[1][1]), self.tamQuadrado, self.tamQuadrado)
         qp.drawRect(posX+(23*matriz[2][0]), posY+(22*matriz[2][1]), self.tamQuadrado, self.tamQuadrado)
         qp.drawRect(posX+(23*matriz[3][0]), posY+(22*matriz[3][1]), self.tamQuadrado, self.tamQuadrado)
-            
+        
+        self.limitarCampo()
+
     def moverEsq(self):
-        print(self.posX)
-        if(self.posX >0):#impede a peça de passar da tela
+        if(self.posX+self.limiteEsq>0):#impede a peça de passar da tela
             self.posX = self.posX -23
     
     def moverDir(self):
-        print(self.posX)
-        if(self.posX+23<= self.x):#impede a peça de passar da tela
+        if(self.posX+self.limiteDir+23<self.x):#impede a peça de passar da tela
             self.posX=self.posX+23
     
-    def cairPeca(self):
-        self.posY=self.posY+22
+    def descerPeca(self):
+        if(self.posY+self.limiteY<self.y):
+            self.posY=self.posY+22
+            
+    def soltarPeca(self):
+        while(self.posY+self.limiteY<self.y):
+            self.posY=self.posY+22 
         
     def subirPeca(self):
         self.posY=self.posY-22
