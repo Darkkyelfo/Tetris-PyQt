@@ -18,7 +18,6 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     #atributos da classe
     desenhoPeca=None
     pecaAtual=None
-    campo=[]
     
     def __init__(self,parent=None):
         super(GameBehavior, self).__init__(parent)
@@ -31,6 +30,11 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         #desenha a peça na tela
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.widget_2=self.desenhoPeca
+        
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.time)
+        timer.start(1000)#executa a função a cada 1 segundo
+        
         self.show()
         
     #funçao que receve eventos do teclado
@@ -50,6 +54,19 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
             self.pecaAtual.gerarPeca()
             
         self.update()#Atualiza a GUI
+    
+    #Responsavel por fazer a peça cair a cada 1s
+    def time(self):
+        self.desenhoPeca.descerPeca()
+        #caso a peça toque o limite do campo
+        #gera uma nova peca
+        if(self.desenhoPeca.tocouY):
+            self.pecaAtual.gerarPeca()
+            self.desenhoPeca.receberPeca(self.pecaAtual)
+            self.desenhoPeca.desenharNovaPeca()
+            self.desenhoPeca.tocouY=False
+        self.update()
+            
         
 if __name__ == '__main__':
     import sys
