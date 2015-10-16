@@ -47,25 +47,10 @@ class DesenhoPeca(QtGui.QWidget):
     def limitarCampo(self):
         #esse trecho encontra o elemento de maior valor nas linhas da matriz
         #Serve para delimitar o movimento das peças
-        minimo =0
-        maximo= 0
-        maxy=0
-        
-        for j,i in enumerate(self.peca.getPeca()):
-            if(minimo>self.peca.getPeca()[j][0]):
-                minimo=self.peca.getPeca()[j][0]
                 
-        for j, i in enumerate(self.peca.getPeca()):
-            if(maximo<self.peca.getPeca()[j][0]):
-                maximo=self.peca.getPeca()[j][0]
-                
-        for j, i in enumerate(self.peca.getPeca()):
-            if(maxy<self.peca.getPeca()[j][1]):
-                maxy=self.peca.getPeca()[j][1]
-                
-        self.limiteEsq=23*minimo
-        self.limiteDir = 23*maximo
-        self.limiteY=22*(maxy+1)
+        self.limiteEsq=23*self.peca.menorX
+        self.limiteDir = 23*self.peca.maiorX
+        self.limiteY=22*(self.peca.maiorY+1)
         
     def desenharNovaPeca(self):
         self.posX=self.posXinicial

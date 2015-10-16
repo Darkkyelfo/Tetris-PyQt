@@ -18,6 +18,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     #atributos da classe
     desenhoPeca=None
     pecaAtual=None
+    tempoDeQueda=300#tempo que leva para a peça se mover(dado em milésimos)
     
     def __init__(self,parent=None):
         super(GameBehavior, self).__init__(parent)
@@ -33,7 +34,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.time)
-        timer.start(1000)#executa a função a cada 1 segundo
+        timer.start(self.tempoDeQueda)#inicia a função time
         
         self.show()
         
@@ -56,31 +57,68 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     #Responsavel por fazer a peça cair a cada 1s
     def time(self):
         self.desenhoPeca.descerPeca()
+        posX=self.desenhoPeca.posX
+        posY =self.desenhoPeca.posY
+        matriz=self.pecaAtual.getPeca()
+        cor = self.desenhoPeca.cor
         #caso a peça toque o limite do campo
         #gera uma nova peca
         if(self.desenhoPeca.tocouY):
-            posX=self.desenhoPeca.posX
-            posY =self.desenhoPeca.posY
-            matriz=self.pecaAtual.getPeca()
-            cor = self.desenhoPeca.cor
             #preenche os quadrados do campo
             for i in range(0,4):
-                self.posXYtoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-            #cria uma nova peça
-            self.pecaAtual=Peca()
-            self.pecaAtual.gerarPeca()
-            self.desenhoPeca.receberPeca(self.pecaAtual)
-            self.desenhoPeca.desenharNovaPeca()
-            self.desenhoPeca.tocouY=False
-            
+                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+                
+            self.criarNovaPeca()
+        elif(self.detectarColisao(posX,posY+(22*self.pecaAtual.maiorY))):
+            #preenche os quadrados do campo
+            for i in range(0,4):
+                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+            self.criarNovaPeca()
+        elif(self.detectarColisao(posX+(23*self.pecaAtual.menorX),posY+(22*self.pecaAtual.maiorY))):
+            #preenche os quadrados do campo
+            for i in range(0,4):
+                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+            self.criarNovaPeca()
+        elif(self.detectarColisao(posX+(23*self.pecaAtual.maiorX),posY+(22*self.pecaAtual.maiorY))):
+            #preenche os quadrados do campo
+            for i in range(0,4):
+                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+            self.criarNovaPeca()
         self.update()
+    
+    #cria uma nova peça
+    def criarNovaPeca(self):
+        self.pecaAtual=Peca()
+        self.pecaAtual.gerarPeca()
+        self.desenhoPeca.receberPeca(self.pecaAtual)
+        self.desenhoPeca.desenharNovaPeca()
+        self.desenhoPeca.tocouY=False
         
-    #responsavel por marcar na matriz os locais onde a peças    
-    def posXYtoIndex(self,posX,posY,cor):
-        indexX = posX/23
-        indexY=posY/22
-        if(self.desenhoPeca.campo[indexY-1][indexX-1]==0):
-            self.desenhoPeca.campo[indexY-1][indexX-1]=[posX,posY,cor]
+    #responsavel por marcar na matriz os locais onde há peças
+    #converte a posição(x,y) em índices da matriz do campo 
+    def postoIndex(self,posX,posY,cor):
+        indexX=self.posXtoIndex(posX)
+        indexY=self.posYtoIndex(posY)
+        if(self.desenhoPeca.campo[indexY][indexX]==0):
+            self.desenhoPeca.campo[indexY][indexX]=[posX,posY,cor]
+            
+    def posXtoIndex(self,posX):
+        return posX/23 -1
+    
+    def posYtoIndex(self,posY):
+        return posY/22 -1 
+    
+    #indica se a peça colidiu com outra peça no eixo y.    
+    def detectarColisao(self,posX,posY):
+        temColisao = False
+        try:
+            if(self.desenhoPeca.campo[self.posYtoIndex(posY)+1][self.posXtoIndex(posX)]!=0):
+                temColisao = True
+        except(IndexError):
+            temColisao = False
+        return temColisao
+        
+            
         
 if __name__ == '__main__':
     import sys
