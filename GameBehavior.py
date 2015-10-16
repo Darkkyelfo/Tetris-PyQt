@@ -18,7 +18,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     #atributos da classe
     desenhoPeca=None
     pecaAtual=None
-    tempoDeQueda=300#tempo que leva para a peça se mover(dado em milésimos)
+    velocidadeQueda=300#tempo que leva para a peça se mover(dado em milésimos)
     
     def __init__(self,parent=None):
         super(GameBehavior, self).__init__(parent)
@@ -34,7 +34,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.time)
-        timer.start(self.tempoDeQueda)#inicia a função time
+        timer.start(self.velocidadeQueda)#inicia a função time
         
         self.show()
         
@@ -51,6 +51,8 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
             self.pecaAtual.rotacionar()
         if(key ==QtCore.Qt.Key_Space):#faz a peça cair rápido
             self.desenhoPeca.soltarPeca()
+        if(key==QtCore.Qt.Key_G):
+            self.pecaAtual.tipo=2
             
         self.update()#Atualiza a GUI
     
@@ -67,23 +69,15 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
             #preenche os quadrados do campo
             for i in range(0,4):
                 self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-                
             self.criarNovaPeca()
-        elif(self.detectarColisao(posX,posY+(22*self.pecaAtual.maiorY))):
-            #preenche os quadrados do campo
-            for i in range(0,4):
-                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-            self.criarNovaPeca()
-        elif(self.detectarColisao(posX+(23*self.pecaAtual.menorX),posY+(22*self.pecaAtual.maiorY))):
-            #preenche os quadrados do campo
-            for i in range(0,4):
-                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-            self.criarNovaPeca()
-        elif(self.detectarColisao(posX+(23*self.pecaAtual.maiorX),posY+(22*self.pecaAtual.maiorY))):
-            #preenche os quadrados do campo
-            for i in range(0,4):
-                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-            self.criarNovaPeca()
+        else:#thecho responsavel por dectecar a colisão entre peças
+
+            for i in range(0,4):#verifica se algum dos quadrados que compoem a peça colidiu
+                if(self.detectarColisao(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]))):
+                    for i in range(0,4):#preenche os quadrados do campo
+                        self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+                    self.criarNovaPeca()
+                    break
         self.update()
     
     #cria uma nova peça
@@ -124,6 +118,5 @@ if __name__ == '__main__':
     import sys
     app = QtGui.QApplication(sys.argv)
     av = GameBehavior()
-    #av.show()
     sys.exit(app.exec_())
     
