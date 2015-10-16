@@ -50,8 +50,6 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
             self.pecaAtual.rotacionar()
         if(key ==QtCore.Qt.Key_Space):#faz a peça cair rápido
             self.desenhoPeca.soltarPeca()
-        if(key==QtCore.Qt.Key_G):
-            self.pecaAtual.gerarPeca()
             
         self.update()#Atualiza a GUI
     
@@ -61,12 +59,28 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         #caso a peça toque o limite do campo
         #gera uma nova peca
         if(self.desenhoPeca.tocouY):
+            posX=self.desenhoPeca.posX
+            posY =self.desenhoPeca.posY
+            matriz=self.pecaAtual.getPeca()
+            cor = self.desenhoPeca.cor
+            #preenche os quadrados do campo
+            for i in range(0,4):
+                self.posXYtoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+            #cria uma nova peça
+            self.pecaAtual=Peca()
             self.pecaAtual.gerarPeca()
             self.desenhoPeca.receberPeca(self.pecaAtual)
             self.desenhoPeca.desenharNovaPeca()
             self.desenhoPeca.tocouY=False
-        self.update()
             
+        self.update()
+        
+    #responsavel por marcar na matriz os locais onde a peças    
+    def posXYtoIndex(self,posX,posY,cor):
+        indexX = posX/23
+        indexY=posY/22
+        if(self.desenhoPeca.campo[indexY-1][indexX-1]==0):
+            self.desenhoPeca.campo[indexY-1][indexX-1]=[posX,posY,cor]
         
 if __name__ == '__main__':
     import sys
