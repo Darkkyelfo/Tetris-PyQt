@@ -38,27 +38,24 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         
         self.show()
         
-    #funçao que receve eventos do teclado
+    #funçao que recebe eventos do teclado
     def keyPressEvent(self, event):
         key = event.key()
         if(key == QtCore.Qt.Key_Right):#mover para a direira
             self.desenhoPeca.moverDir()
         if(key ==QtCore.Qt.Key_Left):#mover para a esquerda 
             self.desenhoPeca.moverEsq()
-        if(key ==QtCore.Qt.Key_Down):
-            self.desenhoPeca.descerPeca()
         if(key ==QtCore.Qt.Key_Up):#rotacionar peça ao apertar up
             self.pecaAtual.rotacionar()
         if(key ==QtCore.Qt.Key_Space):#faz a peça cair rápido
             self.desenhoPeca.soltarPeca()
         if(key==QtCore.Qt.Key_G):
-            self.pecaAtual.tipo=2
+            print(self.desenhoPeca.campo)
             
         self.update()#Atualiza a GUI
     
     #Responsavel por fazer a peça cair a cada 1s
     def time(self):
-        self.desenhoPeca.descerPeca()
         posX=self.desenhoPeca.posX
         posY =self.desenhoPeca.posY
         matriz=self.pecaAtual.getPeca()
@@ -68,16 +65,17 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         if(self.desenhoPeca.tocouY):
             #preenche os quadrados do campo
             for i in range(0,4):
-                self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+                self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
             self.criarNovaPeca()
-        else:#thecho responsavel por dectecar a colisão entre peças
+        else:#trecho responsavel por dectecar a colisão entre peças
 
             for i in range(0,4):#verifica se algum dos quadrados que compoem a peça colidiu
                 if(self.detectarColisao(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]))):
                     for i in range(0,4):#preenche os quadrados do campo
-                        self.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+                        self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
                     self.criarNovaPeca()
                     break
+        self.desenhoPeca.descerPeca()
         self.update()
     
     #cria uma nova peça
@@ -87,30 +85,20 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.desenhoPeca.desenharNovaPeca()
         self.desenhoPeca.tocouY=False
-        
-    #responsavel por marcar na matriz os locais onde há peças
-    #converte a posição(x,y) em índices da matriz do campo 
-    def postoIndex(self,posX,posY,cor):
-        indexX=self.posXtoIndex(posX)
-        indexY=self.posYtoIndex(posY)
-        if(self.desenhoPeca.campo[indexY][indexX]==0):
-            self.desenhoPeca.campo[indexY][indexX]=[posX,posY,cor]
-            
-    def posXtoIndex(self,posX):
-        return posX/23 -1
-    
-    def posYtoIndex(self,posY):
-        return posY/22 -1 
+
     
     #indica se a peça colidiu com outra peça no eixo y.    
     def detectarColisao(self,posX,posY):
         temColisao = False
         try:
-            if(self.desenhoPeca.campo[self.posYtoIndex(posY)+1][self.posXtoIndex(posX)]!=0):
+            if(self.desenhoPeca.campo[self.desenhoPeca.posYtoIndex(posY)+1][self.desenhoPeca.posXtoIndex(posX)]!=0):
                 temColisao = True
         except(IndexError):
             temColisao = False
         return temColisao
+    
+    
+                
         
             
         

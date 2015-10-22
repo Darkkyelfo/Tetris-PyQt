@@ -65,13 +65,22 @@ class DesenhoPeca(QtGui.QWidget):
 
     def paintEvent(self, e):
         qp = QtGui.QPainter(self)
+        alterarMatriz=False#indica que alguma linha da matriz tem que ser "setada" para 0
         #esse trecho varre a matriz do campo e vai preenchendo os locais
         #onde a peças 
         for i in self.campo:
             for j in i:
                 if(j!=0):#Se é diferente de 0 indica que há uma peça nesse indice
                     self.desenharQuadrado(qp,j[0],j[1],j[2])
+                if(0 not in i):#caso forme uma linha ela será apagada
+                    qp.eraseRect(j[0],j[1],self.tamQuadrado,self.tamQuadrado)
+                    alterarMatriz=True
+            if(alterarMatriz):
+                self.campo[self.campo.index(i)]=[0,0,0,0,0,0,0,0,0,0]#apaga a linha
+                alterarMatriz=False
+            
         self.drawRectangles(qp,self.posX,self.posY,self.peca,self.cor)
+        
         
     #função responsavel por desenhar as peças e preencher os quadradoes
     #no campo. Dsenha peças completas    
@@ -99,14 +108,30 @@ class DesenhoPeca(QtGui.QWidget):
         qp.setBrush(QtGui.QColor(colorTable[cor]))
         #desenha apenas um quadrado
         qp.drawRect(posX,posY,self.tamQuadrado, self.tamQuadrado)
+            
 
     def moverEsq(self):
+        podeMover=True
         if(self.posX+self.limiteEsq>0):#impede a peça de passar da tela
-            self.posX = self.posX -23
+            matriz=self.peca.getPeca()
+            #verifica se do lado esquerdo da peça existe outra peça
+            #Só permite que a peça se mova pra esquerda caso não tenha peça.
+            #simula um colisor esquerdo para peça
+            for i in range(0,4):
+                if(self.campo[self.posYtoIndex(self.posY+(22*matriz[i][1]))][self.posXtoIndex(self.posX+(23*matriz[i][0]))-1]!=0):
+                    podeMover=False
+            if(podeMover):
+                self.posX = self.posX -23
     
     def moverDir(self):
+        podeMover=True
         if(self.posX+self.limiteDir+23<self.x):#impede a peça de passar da tela
-            self.posX=self.posX+23
+            matriz=self.peca.getPeca()
+            for i in range(0,4):
+                if(self.campo[self.posYtoIndex(self.posY+(22*matriz[i][1]))][self.posXtoIndex(self.posX+(23*matriz[i][0]))+1]!=0):
+                    podeMover=False
+            if(podeMover):
+                self.posX=self.posX+23
     
     def descerPeca(self):
         if(self.posY+self.limiteY<self.y):
@@ -114,12 +139,35 @@ class DesenhoPeca(QtGui.QWidget):
         else:
             self.tocouY=True
             
-    def soltarPeca(self):
+    def soltarPeca(self):#ainda não está funcional
         while(self.posY+self.limiteY<self.y):
             self.posY=self.posY+22 
         
     def subirPeca(self):
         self.posY=self.posY-22
+    
+    def descerLinhas(self):#ainda não está funcional
+        try:
+            for i,linha in enumerate(self.campo):
+                aux=self.campo[i+1]
+                self.campo[i+1]=self.campo[i]
+                self.campo[i+2]=aux
+        except(IndexError):
+            print("nada")
+            
+    def posXtoIndex(self,posX):
+        return posX/23 -1
+    
+    def posYtoIndex(self,posY):
+        return posY/22 -1 
+    
+    #responsavel por marcar na matriz os locais onde há peças
+    #converte a posição(x,y) em índices da matriz do campo 
+    def postoIndex(self,posX,posY,cor):
+        indexX=self.posXtoIndex(posX)
+        indexY=self.posYtoIndex(posY)
+        if(self.campo[indexY][indexX]==0):
+            self.campo[indexY][indexX]=[posX,posY,cor]
         
 
             
