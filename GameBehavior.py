@@ -19,6 +19,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     desenhoPeca=None
     pecaAtual=None
     velocidadeQueda=300#tempo que leva para a peça se mover(dado em milésimos)
+    timer=None
     
     def __init__(self,parent=None):
         super(GameBehavior, self).__init__(parent)
@@ -32,9 +33,9 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.widget_2=self.desenhoPeca
         
-        timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.time)
-        timer.start(self.velocidadeQueda)#inicia a função time
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.time)
+        self.timer.start(self.velocidadeQueda)#inicia a função time
         
         self.show()
         
@@ -74,6 +75,12 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
                         self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
                     self.criarNovaPeca()
                     break
+        if(self.terminarPartida()):
+            #print("acabou: seus número de linha foi: %s"%(self.desenhoPeca.linhasFeitas))
+            #self.timer.stop()
+            self.update()
+           # return 0
+        
         self.desenhoPeca.descerPeca()
         self.update()
     
@@ -95,6 +102,12 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         except(IndexError):
             temColisao = False
         return temColisao
+    
+    def terminarPartida(self):
+        terminou = False
+        if(self.desenhoPeca.campo[0].count(0) != len(self.desenhoPeca.campo[0])):
+            terminou=True
+        return terminou
         
 if __name__ == '__main__':
     import sys

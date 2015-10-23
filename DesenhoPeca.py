@@ -13,15 +13,16 @@ import random
 #da tela do campo. Foi feita assim,pois, ao chamar o método paintEvent
 #direto na tela campo(GameBehavior) as peças ficam por atras do styleSheet. 
 class DesenhoPeca(QtGui.QWidget):
+    cont=0
     x=None#armazena o tamanho da tela (229)
     y=None
     cor=None#armazena a cor da peca
     tamQuadrado=20
     peca=None#Armazena o tipo de peça. Recebe um objeto do tipo peça
-    #cria uma matriz 21x10 que representa o campo
-    campo=[[0,0,0,0,0,0,0,0,0,0] for i in range(21)]
+    #cria uma matriz 22x10 que representa o campo
+    campo=[[0,0,0,0,0,0,0,0,0,0] for i in range(22)]
     #guarda a posição inicial das peças
-    posXinicial=3*(tamQuadrado+3)
+    posXinicial=4*(tamQuadrado+3)
     posYinicial = 22
     #guarda a posição atual das peças
     posX=posXinicial
@@ -32,7 +33,7 @@ class DesenhoPeca(QtGui.QWidget):
     limiteDir=None
     limiteY=None
     tocouY=False#flag para indicar se a peça tocu o limite inferior
-    
+    linhasFeitas =0
     def __init__(self,telaPai,x,y):
         self.x=x
         self.y=y
@@ -54,7 +55,10 @@ class DesenhoPeca(QtGui.QWidget):
         
     def desenharNovaPeca(self):
         self.posX=self.posXinicial
-        self.posY=self.posYinicial
+        if(self.peca.tipo!=4):#gambiarra para corrigir um erro. Depois explico :)
+            self.posY=self.posYinicial-22
+        else:
+            self.posY=self.posYinicial-44
         self.cor = self.gerarCor()
         
         
@@ -65,6 +69,7 @@ class DesenhoPeca(QtGui.QWidget):
 
     def paintEvent(self, e):
         qp = QtGui.QPainter(self)
+        self.drawRectangles(qp,self.posX,self.posY,self.peca,self.cor)
         alterarMatriz=False#indica que alguma linha da matriz tem que ser "setada" para 0
         #esse trecho varre a matriz do campo e vai preenchendo os locais
         #onde a peças 
@@ -76,10 +81,8 @@ class DesenhoPeca(QtGui.QWidget):
                     qp.eraseRect(self.linhaToPos(linha),self.colunaToPos(coluna),self.tamQuadrado,self.tamQuadrado)
                     alterarMatriz=True
             if(alterarMatriz):
-                #self.campo[linha]=[0,0,0,0,0,0,0,0,0,0]#apaga a linha
                 alterarMatriz=False
                 self.descerLinhas(linha)
-        self.drawRectangles(qp,self.posX,self.posY,self.peca,self.cor)
         
         
     #função responsavel por desenhar as peças e preencher os quadradoes
@@ -147,7 +150,7 @@ class DesenhoPeca(QtGui.QWidget):
         return posX/23 
     
     def posYtoIndex(self,posY):
-        return posY/22 -1
+        return posY/22 
     
     #responsavel por marcar na matriz os locais onde há peças
     #converte a posição(x,y) em índices da matriz do campo 
@@ -158,16 +161,20 @@ class DesenhoPeca(QtGui.QWidget):
             self.campo[indexY][indexX]=[1,cor]
     
     #converte o indice da linha para as coordenadas na GUI
-    def colunaToPos(self,linha):
-        return 23*(linha)
+    def colunaToPos(self,coluna):
+        return 23*(coluna)
     #converte o indice da coluna para as coordenadas na GUI   
-    def linhaToPos(self,coluna):
-        return 22*(coluna+1)
+    def linhaToPos(self,linha):
+        return 22*(linha)
     
-    
-    def descerLinhas(self,indiceLinha):#ainda não está funcional
+    #responsavel por apagar a linha criada 
+    #e pelo efeito descer as linhas acima
+    def descerLinhas(self,indiceLinha):
+        #self.cont+=1
+       # print("entrei %s"%self.cont)
         for i in range(indiceLinha,0,-1):
             self.campo[i]=self.campo[i-1]
+        self.linhasFeitas+=1
 
     def imprimirCampo(self):
         for i in self.campo:
