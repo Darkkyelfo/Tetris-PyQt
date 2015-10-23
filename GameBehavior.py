@@ -88,7 +88,6 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     def criarNovaPeca(self):
         self.pecaAtual=Peca()
         self.pecaAtual.gerarPeca()
-        self.pecaAtual.tipo=3
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.desenhoPeca.desenharNovaPeca()
         self.desenhoPeca.tocouY=False

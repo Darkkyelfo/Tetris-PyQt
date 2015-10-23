@@ -4,7 +4,6 @@ Created on Wed Sep 30 12:45:38 2015
 
 @author: Raul
 """
-import sys
 import random
 
 #Classe responvel por modelar tretraminos através de matrizes

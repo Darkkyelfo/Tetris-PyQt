@@ -4,7 +4,6 @@ Created on Wed Sep 30 12:45:38 2015
 
 @author: Raul
 """
-import sys
 from PyQt4 import QtGui, QtCore
 import random
 
@@ -56,7 +55,7 @@ class DesenhoPeca(QtGui.QWidget):
     def desenharNovaPeca(self):
         self.posX=self.posXinicial
         if(self.peca.tipo!=4):#gambiarra para corrigir um erro. Depois explico :)
-            self.posY=self.posYinicial-22
+            self.posY=self.posYinicial
         else:
             self.posY=self.posYinicial-44
         self.cor = self.gerarCor()
