@@ -78,7 +78,6 @@ class DesenhoPeca(QtGui.QWidget):
                 if(j!=0):#Se é diferente de 0 indica que há uma peça nesse indice
                     self.desenharQuadrado(qp,self.colunaToPos(coluna),self.linhaToPos(linha),j[1])
                 if(0 not in i):#caso forme uma linha ela será apagada
-                    qp.eraseRect(self.linhaToPos(linha),self.colunaToPos(coluna),self.tamQuadrado,self.tamQuadrado)
                     alterarMatriz=True
             if(alterarMatriz):
                 alterarMatriz=False
@@ -174,6 +173,8 @@ class DesenhoPeca(QtGui.QWidget):
        # print("entrei %s"%self.cont)
         for i in range(indiceLinha,0,-1):
             self.campo[i]=self.campo[i-1]
+            if(i==1):
+                self.campo[i-1]=[0,0,0,0,0,0,0,0,0,0]
         self.linhasFeitas+=1
 
     def imprimirCampo(self):

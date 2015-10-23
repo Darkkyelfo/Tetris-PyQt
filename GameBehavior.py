@@ -27,8 +27,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         #cria tela onde vão ser desenhadas as peças
         self.desenhoPeca = DesenhoPeca(self.centralwidget,self.width(),self.height())
         #gera a primeira peca
-        self.pecaAtual=Peca()
-        self.pecaAtual.gerarPeca()            
+        self.criarNovaPeca()         
         #desenha a peça na tela
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.widget_2=self.desenhoPeca
@@ -51,6 +50,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         if(key ==QtCore.Qt.Key_Space):#faz a peça cair rápido
             self.desenhoPeca.soltarPeca()
         if(key==QtCore.Qt.Key_G):
+            print("\n")
             self.desenhoPeca.imprimirCampo()
             
         self.update()#Atualiza a GUI
@@ -76,10 +76,10 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
                     self.criarNovaPeca()
                     break
         if(self.terminarPartida()):
-            #print("acabou: seus número de linha foi: %s"%(self.desenhoPeca.linhasFeitas))
-            #self.timer.stop()
+            print("acabou: seus número de linha foi: %s"%(self.desenhoPeca.linhasFeitas))
+            self.timer.stop()
             self.update()
-           # return 0
+            return 0
         
         self.desenhoPeca.descerPeca()
         self.update()
@@ -88,6 +88,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     def criarNovaPeca(self):
         self.pecaAtual=Peca()
         self.pecaAtual.gerarPeca()
+        self.pecaAtual.tipo=3
         self.desenhoPeca.receberPeca(self.pecaAtual)
         self.desenhoPeca.desenharNovaPeca()
         self.desenhoPeca.tocouY=False
