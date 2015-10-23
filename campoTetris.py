@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'campoTetris.ui'
 #
-# Created: Wed Sep 30 15:16:50 2015
+# Created: Fri Oct 23 19:46:14 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(229, 483)
+        MainWindow.resize(338, 483)
         MainWindow.setStyleSheet(_fromUtf8(""))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setStyleSheet(_fromUtf8(""))
@@ -39,6 +39,15 @@ class Ui_MainWindow(object):
         self.widget_2.setGeometry(QtCore.QRect(0, 0, 229, 483))
         self.widget_2.setStyleSheet(_fromUtf8(""))
         self.widget_2.setObjectName(_fromUtf8("widget_2"))
+        self.score = QtGui.QLCDNumber(self.centralwidget)
+        self.score.setGeometry(QtCore.QRect(230, 40, 101, 41))
+        self.score.setObjectName(_fromUtf8("score"))
+        self.label = QtGui.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(240, 10, 91, 21))
+        font = QtGui.QFont()
+        font.setPointSize(19)
+        self.label.setFont(font)
+        self.label.setObjectName(_fromUtf8("label"))
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -46,6 +55,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "PyQtTetris", None))
+        self.label.setText(_translate("MainWindow", "SCORE", None))
 
 import blocos_rc
 

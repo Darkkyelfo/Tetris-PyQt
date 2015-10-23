@@ -12,7 +12,7 @@ from campoTetris import Ui_MainWindow
 from PyQt4 import QtGui, QtCore
 from DesenhoPeca import DesenhoPeca
 from Peca import Peca
-
+from tocarMusica import tocarMusica
 
 class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
     #atributos da classe
@@ -25,7 +25,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         super(GameBehavior, self).__init__(parent)
         self.setupUi(self)
         #cria tela onde vão ser desenhadas as peças
-        self.desenhoPeca = DesenhoPeca(self.centralwidget,self.width(),self.height())
+        self.desenhoPeca = DesenhoPeca(self.centralwidget,self.widget.width(),self.widget.height())
         #gera a primeira peca
         self.criarNovaPeca()         
         #desenha a peça na tela
@@ -35,7 +35,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.time)
         self.timer.start(self.velocidadeQueda)#inicia a função time
-        
+        tocarMusica(True)
         self.show()
         
     #funçao que recebe eventos do teclado
@@ -61,6 +61,8 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         posY =self.desenhoPeca.posY
         matriz=self.pecaAtual.getPeca()
         cor = self.desenhoPeca.cor
+        #exibe o número de linhas feitas na tela SCORE
+        self.score.display(self.desenhoPeca.linhasFeitas)
         #caso a peça toque o limite do campo
         #gera uma nova peca
         if(self.desenhoPeca.tocouY):
@@ -109,9 +111,4 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
             terminou=True
         return terminou
         
-if __name__ == '__main__':
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    av = GameBehavior()
-    sys.exit(app.exec_())
     

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>229</width>
+    <width>338</width>
     <height>483</height>
    </rect>
   </property>
@@ -44,6 +44,34 @@
     </property>
     <property name="styleSheet">
      <string notr="true"/>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="score">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>40</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>10</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>19</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>SCORE</string>
     </property>
    </widget>
   </widget>

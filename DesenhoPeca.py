@@ -22,7 +22,7 @@ class DesenhoPeca(QtGui.QWidget):
     campo=[[0,0,0,0,0,0,0,0,0,0] for i in range(22)]
     #guarda a posição inicial das peças
     posXinicial=4*(tamQuadrado+3)
-    posYinicial = 22
+    posYinicial = 0
     #guarda a posição atual das peças
     posX=posXinicial
     posY=posYinicial
