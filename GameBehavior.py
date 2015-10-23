@@ -50,7 +50,7 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         if(key ==QtCore.Qt.Key_Space):#faz a peça cair rápido
             self.desenhoPeca.soltarPeca()
         if(key==QtCore.Qt.Key_G):
-            print(self.desenhoPeca.campo)
+            self.desenhoPeca.imprimirCampo()
             
         self.update()#Atualiza a GUI
     
@@ -68,7 +68,6 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
                 self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
             self.criarNovaPeca()
         else:#trecho responsavel por dectecar a colisão entre peças
-
             for i in range(0,4):#verifica se algum dos quadrados que compoem a peça colidiu
                 if(self.detectarColisao(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]))):
                     for i in range(0,4):#preenche os quadrados do campo
@@ -96,11 +95,6 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         except(IndexError):
             temColisao = False
         return temColisao
-    
-    
-                
-        
-            
         
 if __name__ == '__main__':
     import sys

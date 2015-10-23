@@ -68,17 +68,17 @@ class DesenhoPeca(QtGui.QWidget):
         alterarMatriz=False#indica que alguma linha da matriz tem que ser "setada" para 0
         #esse trecho varre a matriz do campo e vai preenchendo os locais
         #onde a peças 
-        for i in self.campo:
-            for j in i:
+        for linha,i in enumerate(self.campo):
+            for coluna,j in enumerate(i):
                 if(j!=0):#Se é diferente de 0 indica que há uma peça nesse indice
-                    self.desenharQuadrado(qp,j[0],j[1],j[2])
+                    self.desenharQuadrado(qp,self.colunaToPos(coluna),self.linhaToPos(linha),j[1])
                 if(0 not in i):#caso forme uma linha ela será apagada
-                    qp.eraseRect(j[0],j[1],self.tamQuadrado,self.tamQuadrado)
+                    qp.eraseRect(self.linhaToPos(linha),self.colunaToPos(coluna),self.tamQuadrado,self.tamQuadrado)
                     alterarMatriz=True
             if(alterarMatriz):
-                self.campo[self.campo.index(i)]=[0,0,0,0,0,0,0,0,0,0]#apaga a linha
+                #self.campo[linha]=[0,0,0,0,0,0,0,0,0,0]#apaga a linha
                 alterarMatriz=False
-            
+                self.descerLinhas(linha)
         self.drawRectangles(qp,self.posX,self.posY,self.peca,self.cor)
         
         
@@ -140,26 +140,14 @@ class DesenhoPeca(QtGui.QWidget):
             self.tocouY=True
             
     def soltarPeca(self):#ainda não está funcional
-        while(self.posY+self.limiteY<self.y):
+        while(self.posY+self.limiteY<self.y and self.campo[self.posYtoIndex(self.posY+(22*self.peca.maiorY))+1][self.posXtoIndex(self.posX)]==0):
             self.posY=self.posY+22 
         
-    def subirPeca(self):
-        self.posY=self.posY-22
-    
-    def descerLinhas(self):#ainda não está funcional
-        try:
-            for i,linha in enumerate(self.campo):
-                aux=self.campo[i+1]
-                self.campo[i+1]=self.campo[i]
-                self.campo[i+2]=aux
-        except(IndexError):
-            print("nada")
-            
     def posXtoIndex(self,posX):
-        return posX/23 -1
+        return posX/23 
     
     def posYtoIndex(self,posY):
-        return posY/22 -1 
+        return posY/22 -1
     
     #responsavel por marcar na matriz os locais onde há peças
     #converte a posição(x,y) em índices da matriz do campo 
@@ -167,8 +155,28 @@ class DesenhoPeca(QtGui.QWidget):
         indexX=self.posXtoIndex(posX)
         indexY=self.posYtoIndex(posY)
         if(self.campo[indexY][indexX]==0):
-            self.campo[indexY][indexX]=[posX,posY,cor]
-        
+            self.campo[indexY][indexX]=[1,cor]
+    
+    #converte o indice da linha para as coordenadas na GUI
+    def colunaToPos(self,linha):
+        return 23*(linha)
+    #converte o indice da coluna para as coordenadas na GUI   
+    def linhaToPos(self,coluna):
+        return 22*(coluna+1)
+    
+    
+    def descerLinhas(self,indiceLinha):#ainda não está funcional
+        for i in range(indiceLinha,0,-1):
+            self.campo[i]=self.campo[i-1]
+
+    def imprimirCampo(self):
+        for i in self.campo:
+            for j in i:
+                if(j!=0):
+                    j=1
+                print(j),
+            print("\n")
+      
 
             
         
