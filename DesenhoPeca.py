@@ -38,7 +38,6 @@ class DesenhoPeca(QtGui.QWidget):
         self.y=y
         super(DesenhoPeca, self).__init__(telaPai)
         self.setGeometry(0, 0, self.x, self.y)
-        self.cor=self.gerarCor()
         
     #função que recebe o tipo de peca     
     def receberPeca(self,peca):
@@ -60,10 +59,10 @@ class DesenhoPeca(QtGui.QWidget):
             self.posY=self.posYinicial-44
         self.cor = self.gerarCor()
         
-        
+    #cor da peça é definida pelo seu tipo    
     def gerarCor(self):
                       
-        cor = random.randint(0,4)
+        cor = self.peca.tipo
         return cor 
 
     def paintEvent(self, e):
@@ -75,7 +74,7 @@ class DesenhoPeca(QtGui.QWidget):
         for linha,i in enumerate(self.campo):
             for coluna,j in enumerate(i):
                 if(j!=0):#Se é diferente de 0 indica que há uma peça nesse indice
-                    self.desenharQuadrado(qp,self.colunaToPos(coluna),self.linhaToPos(linha),j[1])
+                    self.desenharQuadrado(qp,self.colunaToPos(coluna),self.linhaToPos(linha),j)
                 if(0 not in i):#caso forme uma linha ela será apagada
                     alterarMatriz=True
             if(alterarMatriz):
@@ -156,7 +155,7 @@ class DesenhoPeca(QtGui.QWidget):
         indexX=self.posXtoIndex(posX)
         indexY=self.posYtoIndex(posY)
         if(self.campo[indexY][indexX]==0):
-            self.campo[indexY][indexX]=[1,cor]
+            self.campo[indexY][indexX]=cor
     
     #converte o indice da linha para as coordenadas na GUI
     def colunaToPos(self,coluna):

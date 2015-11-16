@@ -16,7 +16,7 @@ class Peca():
     menorX=0#''
     #gera uma peca aleatoriamente
     def gerarPeca(self):    
-        self.tipo = random.randint(1,4)
+        self.tipo = random.randint(1,7)
         self.rotacao=1
         
     #Gera uma peca de um tipo escolhido
@@ -194,6 +194,8 @@ class Peca():
         self.maxMin(matriz)
         
         return matriz
+        
+    
         
     
             
