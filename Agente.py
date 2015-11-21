@@ -7,26 +7,28 @@ Created on Sun Nov 15 17:41:21 2015
 import random
 from ListaSincronizada import ListaSincronizada
 class Agente():
-    genes=ListaSincronizada()    
+    tetrisesFeitas = ListaSincronizada() 
+    genes=[]   
     qtGenes=7
     desempenho=None #armazena oquão eficiente é o agente
     
     #gera um agente aleatório 
     def __init__(self):
         for i in range(0,self.qtGenes):
-            self.genes.add(random.random())
-    
+            self.genes.append(random.random())
+   
     def avaliarJogada(self,campo):
         qualidade=0
         #positivos
-        qualidade =qualidade +(self.genes * self.linhasFeitas()) 
-        qualidade = qualidade +(self.genes*self.numTetrizes())
+        qualidade =qualidade +(self.genes[0] * self.linhasFeitas(campo)) 
+        qualidade = qualidade +(self.genes[1]*self.numTetrizes(campo))
         #negativos
-        qualidade =qualidade -(self.genes * self.alturaMaxima())
-        qualidade =qualidade - (self.genes*self.nivelamento())
-        qualidade = qualidade -(self.genes * self.numBuracos())
-        qualidade = qualidade -(self.genes*self.blocosSobreBuracos())
-        qualidade = qualidade =(self.genes*self.pocos())
+        qualidade =qualidade -(self.genes[2] * self.alturaMaxima(campo))
+        qualidade =qualidade - (self.genes[3]*self.nivelamento(campo))
+        qualidade = qualidade -(self.genes[4] * self.numBuracos(campo))
+        qualidade = qualidade -(self.genes[5]*self.blocosSobreBuracos(campo))
+        qualidade = qualidade =(self.genes[6]*self.pocos(campo))
+        return qualidade
     
     def compararAgente(self,agente):
         ehMelhor=False
@@ -85,6 +87,7 @@ class Agente():
                         ok=False
             if(ok):
                 tetrizes+=1
+        return tetrizes
                 
     #verifica o nivelamento entre as colunas
     def nivelamento(self,campo):
@@ -95,7 +98,7 @@ class Agente():
                     alturas.append(j)
                     break
         nivel=0
-        for i,j in enumerate(alturas):
+        for i in range(len(alturas)-1):
             diferenca =   abs(alturas[i]-alturas[i+1])
             nivel+=diferenca
         return nivel
@@ -111,6 +114,7 @@ class Agente():
                    if(diferenteZero):
                        diferenteZero=False
                        blocos+=1
+        return blocos
                        
     def pocos(self,campo):
         pocos=0
@@ -126,14 +130,14 @@ class Agente():
         #percorre a última coluna
         for i in range(len(campo)-1,-1,-1):
             cont=0
-            if((campo[i][len(campo[0]-2)]==1 and campo[i][len(campo[0]-1)]!=0)):
+            if((campo[i][len(campo[0])-2]==1 and campo[i][len(campo[0])-1]!=0)):
                 cont+=1 
             else:
                 cont=0
             if(cont==4):
                 pocos+=1
       #percorre o meio do campo          
-        for j in range(1,len(campo[0])):
+        for j in range(1,len(campo[0])-1):
             cont=0
             for i in range(len(campo)-1,-1,-1):
                 if(campo[i][j-1]==1 and campo[i][j]==0 and campo[i][j+1]==1):
@@ -142,6 +146,7 @@ class Agente():
                     cont=0
                 if(cont==4):
                     pocos+=1
+        return pocos
             
                   
                 

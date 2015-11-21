@@ -63,22 +63,13 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         cor = self.desenhoPeca.cor
         #exibe o número de linhas feitas na tela SCORE
         self.score.display(self.desenhoPeca.linhasFeitas)
-        #caso a peça toque o limite do campo
-        #gera uma nova peca
-        if(self.desenhoPeca.tocouY):
-            #preenche os quadrados do campo
-            for i in range(0,4):
-                self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-            self.criarNovaPeca()
-        else:#trecho responsavel por dectecar a colisão entre peças
-            for i in range(0,4):#verifica se algum dos quadrados que compoem a peça colidiu
-                if(self.detectarColisao(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]))):
-                    for i in range(0,4):#preenche os quadrados do campo
-                        self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
-                    self.criarNovaPeca()
-                    break
+        for i in range(0,4):#verifica se algum dos quadrados que compoem a peça colidiu
+            if(self.detectarColisao(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]))):
+                for i in range(0,4):#preenche os quadrados do campo
+                    self.desenhoPeca.postoIndex(posX+(23*matriz[i][0]),posY+(22*matriz[i][1]),cor)
+                self.criarNovaPeca()
+                break
         if(self.terminarPartida()):
-            print("acabou: seus número de linha foi: %s"%(self.desenhoPeca.linhasFeitas))
             self.timer.stop()
             self.update()
             return 0
@@ -95,14 +86,15 @@ class GameBehavior(QtGui.QMainWindow,Ui_MainWindow):
         self.desenhoPeca.tocouY=False
 
     
-    #indica se a peça colidiu com outra peça no eixo y.    
+    #indica se a peça colidiu com outra peça no eixo y ou chegou se ao final do campo    
     def detectarColisao(self,posX,posY):
         temColisao = False
         try:
+            #colidiu com outra peça
             if(self.desenhoPeca.campo[self.desenhoPeca.posYtoIndex(posY)+1][self.desenhoPeca.posXtoIndex(posX)]!=0):
                 temColisao = True
-        except(IndexError):
-            temColisao = False
+        except(IndexError):#chegou ao final do campo
+            temColisao = True
         return temColisao
     
     def terminarPartida(self):
