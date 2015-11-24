@@ -13,5 +13,6 @@ if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
    # av = GameBehavior()# descomente se quiser jogar o tetris e comente "av=IA(a)"
     a=Agente()
+    a.genes=[0.55364585,  0.16925342,  0.5622487,  0.7155643,  0.026904278, 0.18746862,  0.13597304  ]
     av=IA(a)#descomente pra deixar a IA jogar e comente "av=GameBehavior
     sys.exit(app.exec_())

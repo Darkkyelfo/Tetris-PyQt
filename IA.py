@@ -16,7 +16,7 @@ class IA(GameBehavior):
     
     def __init__(self,agente):
         self.agente=agente
-        self.velocidadeQueda=1000#determina a velocidade da jogada da IA(dado em milésimos)
+        self.velocidadeQueda=200#determina a velocidade da jogada da IA(dado em milésimos)
         super(IA,self).__init__(None)
     #funçao que recebe eventos do teclado
     #fica desativada quando o Agente joga
@@ -82,6 +82,9 @@ class IA(GameBehavior):
         #trecho responsável pela jogada da IA
         #determina onde o Agente irá jogar
         movPossiveis.sort(key=operator.attrgetter("qualidade"),reverse=True)
+        for i in movPossiveis:
+            print(i.qualidade)
+        print("\n")
         self.pecaAtual.setRotaco(movPossiveis[0].rotacao)
         matriz=self.pecaAtual.getPeca()
         for j in range(4):
