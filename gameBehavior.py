@@ -1,4 +1,4 @@
-from numpy import zeros
+from numpy import zeros, where
 
 from pecas import ControladorPecas
 
@@ -38,18 +38,45 @@ class GameBehavior(object):
             return False
 
     def __moverPeca(self, l=0, c=0):
-        if (self.verificar_posicao_valida(self.posi_atual + l, self.posi_atual[1] + c, self.peca_atual)):
-            self.__apagar_peca(self.posi_atual[0], self.posi_atual[1], self.peca_atual)
-            self.__desenhar_peca(self.posi_atual[0], self.posi_atual[1], self.peca_atual)
-            self.posi_atual = (self.posi_atual + l, self.posi_atual[1] + c)
+        self.__apagar_peca(self.posi_atual[0], self.posi_atual[1], self.peca_atual)
+        self.__desenhar_peca(self.posi_atual[0] + l, self.posi_atual[1] + c, self.peca_atual)
+        self.posi_atual = (self.posi_atual[0] + l, self.posi_atual[1] + c)
+
+    def moverParaBaixo(self):
+        if (self.verificar_posicao_valida(self.posi_atual + 1, self.posi_atual[1], self.peca_atual)):
+            self.__moverPeca(1)
         else:
             self.__porNovaPeca()
 
-    def moverParaBaixo(self):
-        self.__moverPeca(1)
-
     def moverParaDireita(self):
-        self.__moverPeca(c=-1)
+        if (self.verificar_posicao_valida(self.posi_atual, self.posi_atual[1] - 1, self.peca_atual)):
+            self.__moverPeca(c=-1)
 
     def moverParaEsquerda(self):
-        self.__moverPeca(c=1)
+        if (self.verificar_posicao_valida(self.posi_atual, self.posi_atual[1] + 1, self.peca_atual)):
+            self.__moverPeca(c=1)
+
+    def dropPeca(self):
+        while self.verificar_posicao_valida(self.posi_atual + 1, self.posi_atual[1], self.peca_atual):
+            self.__moverPeca(1)
+        self.__porNovaPeca()
+
+    def getLinhasFeitas(self):
+        return where(self.board.any(axis=1) == False)
+
+    def removerLinhasFeitas(self):
+        linhasFeitas = self.getLinhasFeitas()
+        for i in linhasFeitas:
+            self.board[i, :] = 0
+
+    def __descerCampo(self, linha):
+        for l in range(linha, self.board.shape[0]):
+            if (l != self.board.shape[0] - 1):
+                self.board[l, :] = 0
+            else:
+                self.board[l] = self.board[l + 1]
+
+    def atualizarCampo(self):
+        self.removerLinhasFeitas()
+        for i in self.getLinhasFeitas():
+            self.__descerCampo(i)
