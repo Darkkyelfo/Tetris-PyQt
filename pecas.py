@@ -4,7 +4,7 @@ Created on Wed Sep 30 12:45:38 2015
 
 @author: Raul
 """
-from numpy import array, random, append
+from numpy import array, random, append, empty
 
 
 # Classe responvel por modelar tretraminos através de matrizes
@@ -182,6 +182,8 @@ class ControladorPecas(object):
         return peca_da_vez
 
     def _gerarPecas(self, quantidade):
-        pecas = random.randint(7, size=quantidade)
-        pecas[True] = Peca(pecas)
+        pecas_tipos = random.randint(7, size=quantidade)
+        pecas = empty((quantidade), dtype=Peca)
+        for i, tipo in enumerate(pecas_tipos):
+            pecas[i] = Peca(tipo)
         return pecas

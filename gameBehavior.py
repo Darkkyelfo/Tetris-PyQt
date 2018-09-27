@@ -2,6 +2,7 @@ from numpy import zeros, where
 
 from pecas import ControladorPecas
 
+
 class GameBehavior(object):
 
     def __init__(self):
@@ -11,6 +12,7 @@ class GameBehavior(object):
         self.posi_inicial = (1, 5)
         self.posi_atual = self.posi_inicial
         self.jogoAcabou = False
+        self.__porNovaPeca()
 
     def __porNovaPeca(self):
         self.atualizarCampo()
@@ -65,13 +67,13 @@ class GameBehavior(object):
         self.__porNovaPeca()
 
     def getLinhasFeitas(self):
-        return where(self.board.any(axis=1) == False)
+        return where(self.board.any(axis=1))
 
     def removerLinhasFeitas(self):
-        linhasFeitas = self.getLinhasFeitas()
+        linhasFeitas = self.linhasFeitas
         for i in linhasFeitas:
             self.board[i, :] = 0
-        self.score += linhasFeitas.size
+        self.score += len(linhasFeitas)
 
     def __descerCampo(self, linha):
         for l in range(linha, self.board.shape[0]):
@@ -81,10 +83,12 @@ class GameBehavior(object):
                 self.board[l] = self.board[l + 1]
 
     def atualizarCampo(self):
-        self.removerLinhasFeitas()
-        for i in self.getLinhasFeitas():
-            self.__descerCampo(i)
+        self.linhasFeitas = self.getLinhasFeitas()[0]
+        if (self.linhasFeitas.size > 0):
+            self.removerLinhasFeitas()
+            for i in self.linhasFeitas:
+                self.__descerCampo(i)
 
     def verificarJogoAcabou(self):
-        if (self.board[0, :] != 0):
+        if (False in (self.board[0, :] == 0)):
             self.jogoAcabou = True
