@@ -68,6 +68,7 @@ class GameBehavior(object):
         linhasFeitas = self.getLinhasFeitas()
         for i in linhasFeitas:
             self.board[i, :] = 0
+        self.score += linhasFeitas.size
 
     def __descerCampo(self, linha):
         for l in range(linha, self.board.shape[0]):
@@ -80,3 +81,8 @@ class GameBehavior(object):
         self.removerLinhasFeitas()
         for i in self.getLinhasFeitas():
             self.__descerCampo(i)
+
+    def JogoAcabou(self):
+        if (self.board[0, :] == 0):
+            return True
+        return False
