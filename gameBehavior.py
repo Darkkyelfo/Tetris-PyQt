@@ -2,7 +2,6 @@ from numpy import zeros, where
 
 from pecas import ControladorPecas
 
-
 class GameBehavior(object):
 
     def __init__(self):
@@ -11,10 +10,14 @@ class GameBehavior(object):
         self.score = 0
         self.posi_inicial = (1, 5)
         self.posi_atual = self.posi_inicial
+        self.jogoAcabou = False
 
     def __porNovaPeca(self):
-        self.peca_atual = self._controladorPeca.darPeca()
-        self.__desenhar_peca(self.posi_inicial[0], self.posi_inicial[1], self.peca_atual)
+        self.atualizarCampo()
+        self.verificarJogoAcabou()
+        if (self.jogoAcabou == False):
+            self.peca_atual = self._controladorPeca.darPeca()
+            self.__desenhar_peca(self.posi_inicial[0], self.posi_inicial[1], self.peca_atual)
 
     def __desenhar_peca(self, linha, coluna, peca):
         if (self.verificar_posicao_valida(linha, coluna, peca)):
@@ -82,7 +85,6 @@ class GameBehavior(object):
         for i in self.getLinhasFeitas():
             self.__descerCampo(i)
 
-    def JogoAcabou(self):
-        if (self.board[0, :] == 0):
-            return True
-        return False
+    def verificarJogoAcabou(self):
+        if (self.board[0, :] != 0):
+            self.jogoAcabou = True
