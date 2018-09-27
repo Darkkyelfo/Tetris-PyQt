@@ -26,7 +26,7 @@ class Tetris(object):
         return self.gameBehavior.posi_atual[0]
 
     def getColunaAtual(self):
-        return self.gameBehavior.posi_atual[0]
+        return self.gameBehavior.posi_atual[1]
 
     def jogoAcabou(self):
         return self.gameBehavior.jogoAcabou
@@ -55,27 +55,28 @@ class TetrisIA(Tetris):
 
     def iniciarJogo(self, imprimir=False, GUI=False):
         while self.jogoAcabou() != True:
-            self.realizarJogada()
+            self.realizarJogada(imprimir)
+
+    def realizarJogada(self,imprimir):
+        jogada = Jogada(1, 19, 4)
+        while True:
             if (imprimir):
                 self.imprimirTabuleiro()
-
-    def realizarJogada(self):
-        while True:
-            jogada = Jogada(1, 19, 4)
             movimentoAcabou = self.__jogadadParaMovimento(jogada)
             if (movimentoAcabou):
                 break
 
     def __jogadadParaMovimento(self, jogada):
+        c = self.getColunaAtual()
         if (self.getRotacaoPeca() != jogada.rotacao):
             self.setRotacaoPeca(jogada.rotacao)
             return False
 
-        if (jogada.coluna > self.getColunaAtual()):
+        if (jogada.coluna < self.getColunaAtual()):
             self.moverEsquerda()
             return False
 
-        elif (jogada.coluna < self.getColunaAtual()):
+        elif (jogada.coluna > self.getColunaAtual()):
             self.moverDireita()
             return False
 

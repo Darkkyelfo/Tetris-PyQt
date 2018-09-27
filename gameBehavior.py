@@ -10,7 +10,7 @@ class GameBehavior(object):
         self.board = zeros((20, 10))
         self.score = 0
         self.posi_inicial = (1, 5)
-        self.posi_atual = self.posi_inicial
+        self.posi_atual = [self.posi_inicial[0], self.posi_inicial[1]]
         self.jogoAcabou = False
         self.__porNovaPeca()
 
@@ -45,7 +45,8 @@ class GameBehavior(object):
     def __moverPeca(self, l=0, c=0):
         self.__apagar_peca(self.posi_atual[0], self.posi_atual[1], self.peca_atual)
         self.__desenhar_peca(self.posi_atual[0] + l, self.posi_atual[1] + c, self.peca_atual)
-        self.posi_atual = (self.posi_atual[0] + l, self.posi_atual[1] + c)
+        self.posi_atual[0] = self.posi_atual[0] + l
+        self.posi_atual[1] = self.posi_atual[1] + c
 
     def moverParaBaixo(self):
         if (self.verificar_posicao_valida(self.posi_atual + 1, self.posi_atual[1], self.peca_atual)):
@@ -54,15 +55,15 @@ class GameBehavior(object):
             self.__porNovaPeca()
 
     def moverParaDireita(self):
-        if (self.verificar_posicao_valida(self.posi_atual, self.posi_atual[1] - 1, self.peca_atual)):
-            self.__moverPeca(c=-1)
-
-    def moverParaEsquerda(self):
-        if (self.verificar_posicao_valida(self.posi_atual, self.posi_atual[1] + 1, self.peca_atual)):
+        if (self.verificar_posicao_valida(self.posi_atual[0], self.posi_atual[1] + 1, self.peca_atual)):
             self.__moverPeca(c=1)
 
+    def moverParaEsquerda(self):
+        if (self.verificar_posicao_valida(self.posi_atual[0], self.posi_atual[1] - 1, self.peca_atual)):
+            self.__moverPeca(c=-1)
+
     def dropPeca(self):
-        while self.verificar_posicao_valida(self.posi_atual + 1, self.posi_atual[1], self.peca_atual):
+        while self.verificar_posicao_valida(self.posi_atual[0] + 1, self.posi_atual[1], self.peca_atual):
             self.__moverPeca(1)
         self.__porNovaPeca()
 
