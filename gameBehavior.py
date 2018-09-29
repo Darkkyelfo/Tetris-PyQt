@@ -95,7 +95,7 @@ class GameBehavior(object):
                 self.__descerCampo(i)
 
     def verificarJogoAcabou(self):
-        if (False in (self.board[0, :] == 0)):
+        if (False in (self.board[0, :] >= 0)):
             self.jogoAcabou = True
 
     def fixarPeca(self):
