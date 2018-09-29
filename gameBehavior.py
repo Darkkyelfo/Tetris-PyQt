@@ -21,6 +21,8 @@ class GameBehavior(object):
         if (self.jogoAcabou == False):
             self.peca_atual = self._controladorPeca.darPeca()
             self.__desenhar_peca(self.posi_inicial[0], self.posi_inicial[1], self.peca_atual)
+            self.posi_atual[0] = self.posi_inicial[0]
+            self.posi_atual[1] = self.posi_inicial[1]
 
     def __desenhar_peca(self, linha, coluna, peca):
         matriz_peca = peca.getPeca()
@@ -95,7 +97,7 @@ class GameBehavior(object):
                 self.__descerCampo(i)
 
     def verificarJogoAcabou(self):
-        if (False in (self.board[0, :] >= 0)):
+        if (False in (self.board[0, :] <= 0)):
             self.jogoAcabou = True
 
     def fixarPeca(self):

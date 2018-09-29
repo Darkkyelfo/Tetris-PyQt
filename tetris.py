@@ -57,6 +57,7 @@ class TetrisIA(Tetris):
     def iniciarJogo(self, imprimir=False, GUI=False):
         while self.jogoAcabou() != True:
             self.realizarJogada(imprimir)
+            self.imprimirTabuleiro()
 
     def realizarJogada(self,imprimir):
         jogada = Jogada(1, 19, 4)
