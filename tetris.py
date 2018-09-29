@@ -42,6 +42,7 @@ class Tetris(object):
 
     def imprimirTabuleiro(self):
         print(self.getTabuleiro())
+        print("__________________________________\n")
 
     def exibirGUI(self):
         pass

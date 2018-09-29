@@ -22,6 +22,12 @@ class Peca(object):
     def setRotaco(self, rotacao):
         self.rotacao = rotacao
 
+    def getTipoFixo(self):
+        return self.tipo
+
+    def getTipoTrans(self):
+        return -self.tipo
+
     # responsavel por alterar a rotação da peça
     # rotacão 1 é a padrão
     def rotacionar(self):

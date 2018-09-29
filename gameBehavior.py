@@ -12,6 +12,7 @@ class GameBehavior(object):
         self.posi_inicial = (1, 5)
         self.posi_atual = [self.posi_inicial[0], self.posi_inicial[1]]
         self.jogoAcabou = False
+        self.peca_atual = None
         self.__porNovaPeca()
 
     def __porNovaPeca(self):
@@ -22,10 +23,9 @@ class GameBehavior(object):
             self.__desenhar_peca(self.posi_inicial[0], self.posi_inicial[1], self.peca_atual)
 
     def __desenhar_peca(self, linha, coluna, peca):
-        if (self.verificar_posicao_valida(linha, coluna, peca)):
-            matriz_peca = peca.getPeca()
-            for elementos in matriz_peca:
-                self.board[linha + elementos[0]][coluna + elementos[1]] = peca.tipo
+        matriz_peca = peca.getPeca()
+        for elementos in matriz_peca:
+            self.board[linha + elementos[0]][coluna + elementos[1]] = peca.getTipoTrans()
 
     def __apagar_peca(self, linha, coluna, peca):
         matriz_peca = peca.getPeca()
@@ -36,7 +36,7 @@ class GameBehavior(object):
         try:
             matriz_peca = peca.getPeca()
             for elementos in matriz_peca:
-                if (self.board[linha + elementos[0]][coluna + elementos[1]] != 0):
+                if (self.board[linha + elementos[0]][coluna + elementos[1]] > 0):
                     return False
             return True
         except IndexError:
@@ -49,10 +49,13 @@ class GameBehavior(object):
         self.posi_atual[1] = self.posi_atual[1] + c
 
     def moverParaBaixo(self):
-        if (self.verificar_posicao_valida(self.posi_atual + 1, self.posi_atual[1], self.peca_atual)):
+        if (self.verificar_posicao_valida(self.posi_atual[0] + 1, self.posi_atual[1], self.peca_atual)):
             self.__moverPeca(1)
+            return True
         else:
+            self.fixarPeca()
             self.__porNovaPeca()
+            return False
 
     def moverParaDireita(self):
         if (self.verificar_posicao_valida(self.posi_atual[0], self.posi_atual[1] + 1, self.peca_atual)):
@@ -63,12 +66,13 @@ class GameBehavior(object):
             self.__moverPeca(c=-1)
 
     def dropPeca(self):
-        while self.verificar_posicao_valida(self.posi_atual[0] + 1, self.posi_atual[1], self.peca_atual):
-            self.__moverPeca(1)
-        self.__porNovaPeca()
+        while True:
+            if(self.moverParaBaixo()==False):
+                break
+
 
     def getLinhasFeitas(self):
-        return where(self.board.any(axis=1))
+        return where(self.board.all(axis=1))
 
     def removerLinhasFeitas(self):
         linhasFeitas = self.linhasFeitas
@@ -93,3 +97,10 @@ class GameBehavior(object):
     def verificarJogoAcabou(self):
         if (False in (self.board[0, :] == 0)):
             self.jogoAcabou = True
+
+    def fixarPeca(self):
+        if (self.peca_atual != None):
+            matriz_peca = self.peca_atual.getPeca()
+            for elementos in matriz_peca:
+                self.board[self.posi_atual[0] + elementos[0]][
+                    self.posi_atual[1] + elementos[1]] = self.peca_atual.getTipoFixo()
