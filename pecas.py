@@ -178,14 +178,14 @@ class ControladorPecas(object):
     def __init__(self, quantidade, seed=None):
         self.seed = seed
         self.pecas = self._gerarPecas(quantidade)
-        self.peca_atual = 0
+        self._peca_atual = 0
         self.limite = self.pecas.size
 
     def darPeca(self):
-        if (self.peca_atual > self.limite):
+        if (self._peca_atual > self.limite):
             append(self.pecas, self._gerarPecas(1000))
-        peca_da_vez = self.pecas[self.peca_atual]
-        self.peca_atual += 1
+        peca_da_vez = self.pecas[self._peca_atual]
+        self._peca_atual += 1
         return peca_da_vez
 
     def _gerarPecas(self, quantidade):
@@ -197,3 +197,12 @@ class ControladorPecas(object):
         for i, tipo in enumerate(pecas_tipos):
             pecas[i] = Peca(tipo)
         return pecas
+
+    def getIndiceAtual(self):
+        return self._peca_atual
+
+    def setIndiceAtual(self, indice):
+        self._peca_atual = indice
+
+    def setIndiceAnterior(self):
+        self._peca_atual -= 1

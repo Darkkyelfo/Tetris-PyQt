@@ -42,6 +42,7 @@ class Tetris(object):
 
     def drop(self):
         self.gameBehavior.dropPeca()
+        self.gameBehavior.finalizarMovimento()
 
     def imprimirTabuleiro(self):
         print(self.getTabuleiro())

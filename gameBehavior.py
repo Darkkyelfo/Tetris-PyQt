@@ -1,6 +1,15 @@
-from numpy import zeros, where
+from numpy import zeros, where, copy
 
 from pecas import ControladorPecas
+
+
+class EstadoJogo(object):
+
+    def __init__(self, campo, indiceControlador,posicaoAtual,score):
+        self.campo = campo
+        self.indiceControlador = indiceControlador
+        self.posicaoAtual = posicaoAtual
+        self.score = score
 
 
 class GameBehavior(object):
@@ -58,22 +67,28 @@ class GameBehavior(object):
             self.__moverPeca(1)
             return True
         else:
-            self.fixarPeca()
-            self.__porNovaPeca()
             return False
 
     def moverParaDireita(self):
         if (self.verificar_posicao_valida(self.posi_atual[0], self.posi_atual[1] + 1, self.peca_atual)):
             self.__moverPeca(c=1)
+            return True
+        return False
 
     def moverParaEsquerda(self):
         if (self.verificar_posicao_valida(self.posi_atual[0], self.posi_atual[1] - 1, self.peca_atual)):
             self.__moverPeca(c=-1)
+            return True
+        return False
 
     def dropPeca(self):
         while True:
             if (self.moverParaBaixo() == False):
                 break
+
+    def finalizarMovimento(self):
+        self.fixarPeca()
+        self.__porNovaPeca()
 
     def getLinhasFeitas(self):
         return where(self.board.all(axis=1))
@@ -109,3 +124,13 @@ class GameBehavior(object):
             for elementos in matriz_peca:
                 self.board[self.posi_atual[0] + elementos[0]][
                     self.posi_atual[1] + elementos[1]] = self.peca_atual.getTipoFixo()
+
+    def salvarEstado(self):
+        return EstadoJogo(copy(self.board), self._controladorPeca._peca_atual,self.posi_atual,self.score)
+
+    def setEstado(self, estado):
+        self.board = estado.campo
+        self._controladorPeca.setIndiceAtual(estado.indiceControlador)
+        self.peca_atual = self._controladorPeca.darPeca()
+        self.posi_atual = estado.posicaoAtual
+        self.score = estado.score
