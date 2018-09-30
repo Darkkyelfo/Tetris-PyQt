@@ -6,13 +6,16 @@ from pecas import ControladorPecas
 class GameBehavior(object):
 
     def __init__(self):
-        self._controladorPeca = ControladorPecas(1000000)
+
         self.board = zeros((20, 10))
         self.score = 0
         self.posi_inicial = (1, 5)
         self.posi_atual = [self.posi_inicial[0], self.posi_inicial[1]]
         self.jogoAcabou = False
         self.peca_atual = None
+
+    def iniciar(self, seed=None):
+        self._controladorPeca = ControladorPecas(1000000, seed)
         self.__porNovaPeca()
 
     def __porNovaPeca(self):
@@ -69,9 +72,8 @@ class GameBehavior(object):
 
     def dropPeca(self):
         while True:
-            if(self.moverParaBaixo()==False):
+            if (self.moverParaBaixo() == False):
                 break
-
 
     def getLinhasFeitas(self):
         return where(self.board.all(axis=1))
@@ -95,6 +97,7 @@ class GameBehavior(object):
             self.removerLinhasFeitas()
             for i in self.linhasFeitas:
                 self.__descerCampo(i)
+            self.atualizarCampo()
 
     def verificarJogoAcabou(self):
         if (False in (self.board[0, :] <= 0)):

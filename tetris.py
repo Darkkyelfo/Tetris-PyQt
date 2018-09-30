@@ -7,6 +7,9 @@ class Tetris(object):
     def __init__(self):
         self.gameBehavior = GameBehavior()
 
+    def iniciarJogo(self,seed = None):
+        self.gameBehavior.iniciar(seed)
+
     def getScore(self):
         return self.gameBehavior.score
 
@@ -54,7 +57,8 @@ class TetrisIA(Tetris):
         super().__init__()
         self.IA = IA
 
-    def iniciarJogo(self, imprimir=False, GUI=False):
+    def iniciarJogo(self,seed=None ,imprimir=False, GUI=False):
+        super().iniciarJogo(seed)
         while self.jogoAcabou() != True:
             self.realizarJogada(imprimir)
             self.imprimirTabuleiro()
@@ -69,7 +73,7 @@ class TetrisIA(Tetris):
                 break
 
     def __jogadadParaMovimento(self, jogada):
-        c = self.getColunaAtual()
+        # c = self.getColunaAtual()
         if (self.getRotacaoPeca() != jogada.rotacao):
             self.setRotacaoPeca(jogada.rotacao)
             return False

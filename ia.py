@@ -4,3 +4,10 @@ class Jogada(object):
         self.rotacao = rotacao
         self.linha = linha
         self.coluna = coluna
+
+class avaliardorDeCampo(object):
+
+class IA(object):
+
+
+

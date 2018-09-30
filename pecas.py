@@ -175,7 +175,8 @@ class Peca(object):
 
 class ControladorPecas(object):
 
-    def __init__(self, quantidade):
+    def __init__(self, quantidade, seed=None):
+        self.seed = seed
         self.pecas = self._gerarPecas(quantidade)
         self.peca_atual = 0
         self.limite = self.pecas.size
@@ -188,6 +189,9 @@ class ControladorPecas(object):
         return peca_da_vez
 
     def _gerarPecas(self, quantidade):
+        if (self.seed != None):
+            random.seed(self.seed)
+            self.seed += 1
         pecas_tipos = random.randint(7, size=quantidade)
         pecas = empty((quantidade), dtype=Peca)
         for i, tipo in enumerate(pecas_tipos):
