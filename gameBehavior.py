@@ -1,5 +1,4 @@
 from numpy import zeros, where, copy
-
 from pecas import ControladorPecas
 
 
@@ -129,7 +128,7 @@ class GameBehavior(object):
         return EstadoJogo(copy(self.board), self._controladorPeca._peca_atual,self.posi_atual,self.score)
 
     def setEstado(self, estado):
-        self.board = estado.campo
+        self.board = copy(estado.campo)
         self._controladorPeca.setIndiceAtual(estado.indiceControlador)
         self.peca_atual = self._controladorPeca.darPeca()
         self.posi_atual = estado.posicaoAtual
