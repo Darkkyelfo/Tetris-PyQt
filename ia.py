@@ -98,22 +98,23 @@ class IA(object):
         while self.__gameBehavior.moverParaEsquerda:
             pass
         saveJogo = self.__gameBehavior.salvarEstado()
+        peca = self.__gameBehavior.peca_atual
         valorMax = -maxsize - 1
         jogadaEscolhida = None
-        while True:
-            posicaoJogada = self.__gameBehavior.posi_atual
-            saveJogo.posicaoAtual = posicaoJogada
-            peca = self.__gameBehavior.peca_atual
-
-            self.__gameBehavior.dropPeca()
-            self.__gameBehavior.fixarPeca()
-            self.__gameBehavior.atualizarCampo()
-            valor = self.__avaliarJogada()
-            if (self.__avaliarJogada() > valorMax):
-                jogadaEscolhida = Jogada(peca.rotacao, posicaoJogada[0], posicaoJogada[1], valor)
-            self.__gameBehavior.setEstado(saveJogo)
-            if (self.__gameBehavior.moverParaDireita == False):
-                break
+        for i in range(1, peca.rotacaoMax+1):
+            peca.setRotaco(i)
+            while True:
+                posicaoJogada = self.__gameBehavior.posi_atual
+                saveJogo.posicaoAtual = posicaoJogada
+                self.__gameBehavior.dropPeca()
+                self.__gameBehavior.fixarPeca()
+                self.__gameBehavior.atualizarCampo()
+                valor = self.__avaliarJogada()
+                if (self.__avaliarJogada() > valorMax):
+                    jogadaEscolhida = Jogada(peca.rotacao, posicaoJogada[0], posicaoJogada[1], valor)
+                self.__gameBehavior.setEstado(saveJogo)
+                if (self.__gameBehavior.moverParaDireita == False):
+                    break
 
         return jogadaEscolhida
 
@@ -126,5 +127,3 @@ class IA(object):
         valorDaJogada -= self.genes[4] * AvaliardorDeJogo.contarPocos(self.__gameBehavior)
         valorDaJogada -= self.genes[5] * AvaliardorDeJogo.nivelamento(self.__gameBehavior)
         return valorDaJogada
-
-
