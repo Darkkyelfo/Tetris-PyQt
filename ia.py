@@ -74,6 +74,7 @@ class AvaliardorDeJogo(object):
             altDireita = where(colunaDireita != 0)[0][0]
         return abs(altDireita - altEsquerda)
 
+
 class IA(object):
 
     def __init__(self, qtGenes=6, genes=None):
@@ -91,27 +92,32 @@ class IA(object):
 
     def jogar(self):
         from sys import maxsize
-        board = self.__gameBehavior.board
-        while self.__gameBehavior.moverParaEsquerda():
-            pass
-        saveJogo = self.__gameBehavior.salvarEstado()
         peca = self.__gameBehavior.peca_atual
-        valorMax = -maxsize - 1
         jogadaEscolhida = None
-        for i in range(1, peca.rotacaoMax+1):
+        saveJogo = self.__gameBehavior.salvarEstado()
+        for i in range(1, peca.rotacaoMax + 1):
+            valorMax = -maxsize - 1
             peca.setRotaco(i)
+            self.__gameBehavior.posi_atual[0], self.__gameBehavior.posi_atual[1] = saveJogo.getPosicao()
+            while self.__gameBehavior.moverParaEsquerda():
+                pass
             while True:
-                posicaoJogada = self.__gameBehavior.posi_atual
-                saveJogo.posicaoAtual = posicaoJogada
+                # board = self.__gameBehavior.board
+                # gameb = self.__gameBehavior
+                linhaAtual, colunaAtual = self.__gameBehavior.posi_atual[0], self.__gameBehavior.posi_atual[1]
                 self.__gameBehavior.dropPeca()
                 self.__gameBehavior.fixarPeca()
+                posicaoJogada = self.__gameBehavior.posi_atual
                 self.__gameBehavior.atualizarCampo()
                 valor = self.__avaliarJogada()
                 if (self.__avaliarJogada() > valorMax):
                     jogadaEscolhida = Jogada(peca.rotacao, posicaoJogada[0], posicaoJogada[1], valor)
+                    valorMax = valor
                 self.__gameBehavior.setEstado(saveJogo)
+                self.__gameBehavior.posi_atual[0], self.__gameBehavior.posi_atual[1] = linhaAtual, colunaAtual
                 if (self.__gameBehavior.moverParaDireita() == False):
                     break
+
 
         return jogadaEscolhida
 

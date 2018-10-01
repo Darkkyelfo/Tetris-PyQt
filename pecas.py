@@ -38,7 +38,7 @@ class Peca(object):
     def getPeca(self):
         matriz_peca = None
         # []
-        if (self.tipo == 0):
+        if (self.tipo == 1):
             matriz_peca = [[0, 0],  # 0
                            [0, 1],  # 1
                            [1, 0],  # 2
@@ -46,7 +46,7 @@ class Peca(object):
             self.rotacaoMax = 1
 
         # L
-        elif (self.tipo == 1):
+        elif (self.tipo == 2):
             self.rotacaoMax = 4
             if (self.rotacao == 1):
                 matriz_peca = [[0, 0],
@@ -73,7 +73,7 @@ class Peca(object):
                                [0, 1]]
 
         # peça I
-        elif (self.tipo == 2):
+        elif (self.tipo == 3):
             self.rotacaoMax = 2
             if (self.rotacao == 1):
                 matriz_peca = [[0, 0],
@@ -88,7 +88,7 @@ class Peca(object):
                                [0, 2]]
 
         # peça T
-        elif (self.tipo == 3):
+        elif (self.tipo == 4):
             self.rotacaoMax = 4
             if (self.rotacao == 1):
                 matriz_peca = [[0, 0],
@@ -115,7 +115,7 @@ class Peca(object):
                                [1, 0]]
 
         # peça S
-        elif (self.tipo == 4):
+        elif (self.tipo == 5):
             if (self.rotacao == 1):
                 self.rotacaoMax = 2
                 matriz_peca = [[0, 0],
@@ -130,7 +130,7 @@ class Peca(object):
                                [0, 1]]
 
         # peça Z
-        elif (self.tipo == 5):
+        elif (self.tipo == 6):
             self.rotacaoMax = 2
             if (self.rotacao == 1):
                 matriz_peca = [[0, 0],
@@ -145,7 +145,7 @@ class Peca(object):
                                [1, 0]]
 
         # peça P
-        elif (self.tipo == 6):
+        elif (self.tipo == 7):
             self.rotacaoMax = 4
             if (self.rotacao == 1):
                 matriz_peca = [[0, 0],
@@ -158,12 +158,13 @@ class Peca(object):
                                [-1, 0],
                                [-1, 1],
                                [1, 0]]
-            # P "L invertido"
+
             elif (self.rotacao == 3):
                 matriz_peca = [[0, 0],
                                [0, 1],
                                [0, -1],
                                [1, 1]]
+            # P "L invertido"
             else:
                 matriz_peca = [[0, 0],
                                [-1, 0],
@@ -192,7 +193,7 @@ class ControladorPecas(object):
         if (self.seed != None):
             random.seed(self.seed)
             self.seed += 1
-        pecas_tipos = random.randint(7, size=quantidade)
+        pecas_tipos = random.randint(1, 8, size=quantidade)
         pecas = empty((quantidade), dtype=Peca)
         for i, tipo in enumerate(pecas_tipos):
             pecas[i] = Peca(tipo)

@@ -5,11 +5,19 @@ from pecas import ControladorPecas
 
 class EstadoJogo(object):
 
-    def __init__(self, campo, indiceControlador, posicaoAtual, score):
-        self.campo = campo
+    def __init__(self, campo, indiceControlador, linha, coluna, score):
+        self.campo = copy(campo)
+        self.campo[self.campo < 0] = 0
         self.indiceControlador = indiceControlador
-        self.posicaoAtual = posicaoAtual
+        self.setPosicao(linha, coluna)
         self.score = score
+
+    def getPosicao(self):
+        return self.linha, self.coluna
+
+    def setPosicao(self, linha, coluna):
+        self.linha = linha
+        self.coluna = coluna
 
 
 class GameBehavior(object):
@@ -131,11 +139,12 @@ class GameBehavior(object):
                     self.posi_atual[1] + elementos[1]] = self.peca_atual.getTipoFixo()
 
     def salvarEstado(self):
-        return EstadoJogo(copy(self.board), self._controladorPeca._peca_atual, self.posi_atual, self.score)
+        return EstadoJogo(self.board, self._controladorPeca._peca_atual, self.posi_atual[0], self.posi_atual[1],
+                          self.score)
 
     def setEstado(self, estado):
         self.board = copy(estado.campo)
-        self._controladorPeca.setIndiceAtual(estado.indiceControlador)
-        self.peca_atual = self._controladorPeca.darPeca()
-        self.posi_atual = estado.posicaoAtual
+        # self._controladorPeca.setIndiceAtual(estado.indiceControlador)
+        # self.peca_atual = self._controladorPeca.darPeca()
+        self.posi_atual[0], self.posi_atual[1] = estado.getPosicao()
         self.score = estado.score
