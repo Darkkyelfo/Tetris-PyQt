@@ -1,4 +1,5 @@
-from tetris import TetrisIA
+from tetris import TetrisIA,IA
 
-t= TetrisIA("Ted")
+ia = IA()
+t = TetrisIA(ia)
 t.iniciarJogo(imprimir=True)

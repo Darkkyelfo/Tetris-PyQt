@@ -15,15 +15,15 @@ class AvaliardorDeJogo(object):
     @staticmethod
     def alturaMaxima(gameBehavior):
         alturaMax = gameBehavior.board.shape[0]
-        alturaDoCampo = where(gameBehavior.board.any(axis=1)).size[0]
-        return alturaMax - alturaMax if alturaDoCampo.size == 0 else alturaDoCampo[0] - 1
+        alturaDoCampo = where(gameBehavior.board.any(axis=1))[0][0]
+        return alturaMax - alturaMax if alturaDoCampo.size == 0 else alturaDoCampo - 1
 
     @staticmethod
     def contarBuracos(gameBehavior):
         holes = 0
-        for coluna in gameBehavior.board.shape[1]:
+        for coluna in range(gameBehavior.board.shape[1]):
             diff = False
-            for linha in gameBehavior.board.shape[0]:
+            for linha in range(gameBehavior.board.shape[0]):
                 if gameBehavior.board[linha][coluna] != 0:
                     diff = True
                 else:
@@ -34,9 +34,9 @@ class AvaliardorDeJogo(object):
     @staticmethod
     def contarBuracosConectados(gameBehavior):
         holes = 0
-        for coluna in gameBehavior.board.shape[1]:
+        for coluna in range(gameBehavior.board.shape[1]):
             diff = False
-            for linha in gameBehavior.board.shape[0]:
+            for linha in range(gameBehavior.board.shape[0]):
                 if gameBehavior.board[linha][coluna] != 0:
                     diff = True
                 else:
@@ -52,7 +52,7 @@ class AvaliardorDeJogo(object):
         posicoes = where(board != 0)
         for i, linha in enumerate(posicoes[0]):
             coluna = posicoes[1][i]
-            if (board[linha + 1][coluna] == 0):
+            if (gameBehavior.board[linha + 2][coluna] == 0):
                 blocos += 1
         return blocos
 
@@ -74,18 +74,14 @@ class AvaliardorDeJogo(object):
             altDireita = where(colunaDireita != 0)[0][0]
         return abs(altDireita - altEsquerda)
 
-
-class avaliadorDeIa(object):
-    pass
-
-
 class IA(object):
 
     def __init__(self, qtGenes=6, genes=None):
         self.qtGenes = qtGenes
         if (genes == None):
             self.gerarGenes()
-        self.genes = genes
+        else:
+            self.genes = genes
 
     def gerarGenes(self):
         self.genes = random.random(self.qtGenes)
@@ -95,7 +91,8 @@ class IA(object):
 
     def jogar(self):
         from sys import maxsize
-        while self.__gameBehavior.moverParaEsquerda:
+        board = self.__gameBehavior.board
+        while self.__gameBehavior.moverParaEsquerda():
             pass
         saveJogo = self.__gameBehavior.salvarEstado()
         peca = self.__gameBehavior.peca_atual
@@ -113,14 +110,14 @@ class IA(object):
                 if (self.__avaliarJogada() > valorMax):
                     jogadaEscolhida = Jogada(peca.rotacao, posicaoJogada[0], posicaoJogada[1], valor)
                 self.__gameBehavior.setEstado(saveJogo)
-                if (self.__gameBehavior.moverParaDireita == False):
+                if (self.__gameBehavior.moverParaDireita() == False):
                     break
 
         return jogadaEscolhida
 
     def __avaliarJogada(self):
         valorDaJogada = 0
-        valorDaJogada += self.genes[0] * self.__gameBehavior.linhasFeitas
+        valorDaJogada += self.genes[0] * self.__gameBehavior.qtLinhasFeitas
         valorDaJogada -= self.genes[1] * AvaliardorDeJogo.alturaMaxima(self.__gameBehavior)
         valorDaJogada -= self.genes[2] * AvaliardorDeJogo.blocosSobreBuracos(self.__gameBehavior)
         valorDaJogada -= self.genes[3] * AvaliardorDeJogo.contarBuracos(self.__gameBehavior)

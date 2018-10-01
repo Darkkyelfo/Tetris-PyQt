@@ -1,10 +1,11 @@
 from numpy import zeros, where, copy
+
 from pecas import ControladorPecas
 
 
 class EstadoJogo(object):
 
-    def __init__(self, campo, indiceControlador,posicaoAtual,score):
+    def __init__(self, campo, indiceControlador, posicaoAtual, score):
         self.campo = campo
         self.indiceControlador = indiceControlador
         self.posicaoAtual = posicaoAtual
@@ -49,7 +50,11 @@ class GameBehavior(object):
         try:
             matriz_peca = peca.getPeca()
             for elementos in matriz_peca:
-                if (self.board[linha + elementos[0]][coluna + elementos[1]] > 0):
+                linhaResultante = linha + elementos[0]
+                colunaResultante = coluna + elementos[1]
+                if (linhaResultante < 0 or colunaResultante < 0):
+                    return False
+                elif (self.board[linhaResultante][colunaResultante] > 0):
                     return False
             return True
         except IndexError:
@@ -93,7 +98,7 @@ class GameBehavior(object):
         return where(self.board.all(axis=1))
 
     def removerLinhasFeitas(self):
-        linhasFeitas = self.linhasFeitas
+        linhasFeitas = self.__linhasFeitas
         for i in linhasFeitas:
             self.board[i, :] = 0
         self.score += len(linhasFeitas)
@@ -106,10 +111,11 @@ class GameBehavior(object):
                 self.board[l] = self.board[l + 1]
 
     def atualizarCampo(self):
-        self.linhasFeitas = self.getLinhasFeitas()[0]
-        if (self.linhasFeitas.size > 0):
+        self.__linhasFeitas = self.getLinhasFeitas()[0]
+        self.qtLinhasFeitas = self.__linhasFeitas.size
+        if (self.qtLinhasFeitas > 0):
             self.removerLinhasFeitas()
-            for i in self.linhasFeitas:
+            for i in self.__linhasFeitas:
                 self.__descerCampo(i)
             self.atualizarCampo()
 
@@ -125,7 +131,7 @@ class GameBehavior(object):
                     self.posi_atual[1] + elementos[1]] = self.peca_atual.getTipoFixo()
 
     def salvarEstado(self):
-        return EstadoJogo(copy(self.board), self._controladorPeca._peca_atual,self.posi_atual,self.score)
+        return EstadoJogo(copy(self.board), self._controladorPeca._peca_atual, self.posi_atual, self.score)
 
     def setEstado(self, estado):
         self.board = copy(estado.campo)

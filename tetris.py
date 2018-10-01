@@ -1,5 +1,5 @@
 from gameBehavior import GameBehavior
-from ia import Jogada
+from ia import IA
 
 
 class Tetris(object):
@@ -57,6 +57,7 @@ class TetrisIA(Tetris):
     def __init__(self, IA):
         super().__init__()
         self.IA = IA
+        self.IA.setGameBehavior(self.gameBehavior)
 
     def iniciarJogo(self,seed=None ,imprimir=False, GUI=False):
         super().iniciarJogo(seed)
@@ -65,7 +66,7 @@ class TetrisIA(Tetris):
             self.imprimirTabuleiro()
 
     def realizarJogada(self,imprimir):
-        jogada = Jogada(1, 19, 4)
+        jogada = self.IA.jogar()
         while True:
             if (imprimir):
                 self.imprimirTabuleiro()
